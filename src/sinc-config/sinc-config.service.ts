@@ -5,7 +5,6 @@ import { CreateSincConfigDto } from './dto/create-sinc-config.dto';
 import { UpdateSincConfigDto } from './dto/update-sinc-config.dto';
 import { SincConfig } from './entities/sinc-config.entity';
 import { SincConfigRepository } from './sinc-config.repository';
-
 @Injectable()
 export class SincConfigService {
   constructor(
