@@ -9,20 +9,6 @@ describe('UsersService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
-        TypeOrmModule.forRoot({
-          name: 'e2e_test',
-          type: 'mariadb',
-          host: 'localhost',
-          port: 3307,
-          username: 'root',
-          password: 's2crm49y!',
-          database: 'e2e_test',
-          synchronize: false,
-          entities: ['dist/**/*.entity.js'],
-          keepConnectionAlive: true,
-        }),
-      ],
       providers: [
         UsersService,
         {

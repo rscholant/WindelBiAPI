@@ -1,29 +1,30 @@
-import { SincDatum } from 'src/sinc-data/entities/sinc-datum.entity';
+import { SincConfig } from 'src/sinc-config/entities/sinc-config.entity';
+import { User } from 'src/users/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToOne,
+  ManyToOne,
 } from 'typeorm';
 
 @Entity()
-export class User {
+export class SincDatum {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 50 })
-  name: string;
+  @ManyToOne(() => User, (user) => user.sincDatum)
+  user: User;
 
-  @Column({ length: 50 })
-  cnpj: string;
+  @ManyToOne(() => SincConfig, (sincConfig) => sincConfig.sincDatum)
+  sincConfig: SincConfig;
 
-  @Column()
-  status: number;
+  @Column('timestamp')
+  dateSinc: Date;
 
-  @OneToOne(() => SincDatum, (sincDatum) => sincDatum.user)
-  sincDatum: SincDatum[];
+  @Column({ type: 'json' })
+  data: { data: JSON };
 
   @CreateDateColumn({
     type: 'timestamp',
