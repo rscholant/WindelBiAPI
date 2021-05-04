@@ -1,9 +1,9 @@
 import { SincConfig } from './entities/sinc-config.entity';
-import { EntityRepository, Repository } from 'typeorm';
+import { EntityNotFoundError, EntityRepository, Repository } from 'typeorm';
 import { CreateSincConfigDto } from './dto/create-sinc-config.dto';
 import { UpdateSincConfigDto } from './dto/update-sinc-config.dto';
 import { User } from 'src/users/entities/user.entity';
-
+import { HttpException, HttpStatus } from '@nestjs/common';
 @EntityRepository(SincConfig)
 export class SincConfigRepository extends Repository<SincConfig> {
   createSincConfig = async (sincConfigDTO: CreateSincConfigDto, user: User) => {
@@ -29,7 +29,15 @@ export class SincConfigRepository extends Repository<SincConfig> {
     return this.save({ ...sincConfigDto, id: Number(id), user: user });
   };
   removeSincConfig = async (id: string) => {
-    await this.findOneOrFail(id);
-    return this.delete(id);
+    try {
+      await this.findOneOrFail(id);
+      return this.delete(id);
+    } catch (err) {
+      if (err instanceof EntityNotFoundError)
+        throw new HttpException(
+          'Record not found for removal 😢',
+          HttpStatus.BAD_REQUEST,
+        );
+    }
   };
 }

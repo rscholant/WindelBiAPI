@@ -19,7 +19,7 @@ export class AuthService {
   async register(userDto: CreateUserDto): Promise<RegistrationStatus> {
     let status: RegistrationStatus = {
       success: true,
-      message: 'user registered',
+      message: 'user registered 🥰',
     };
 
     try {
