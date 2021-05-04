@@ -1,73 +1,79 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# Windel BI API ™
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+---
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 💪 Projeto
 
-## Description
+Projeto criado para que se possa enviar dados do banco de dados local que está hospedado em Firebird, para um banco de dados em um servidor externo, para utilização de relatórios de clientes.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+---
 
-## Installation
+## 🔧 Tabelas locais
 
-```bash
-$ npm install
-```
+### ⚙️ BI_CONFIG
 
-## Running the app
+Tabela responsável por conter as configurações do servidor, versão do banco de dados, versão do sincronizador e etc...
 
-```bash
-# development
-$ npm run start
+| Campo | Tipo    | Tamanho | Null? |
+| ----- | ------- | ------- | ----- |
+| KEY   | Varchar | 100     | Não   |
+| VALUE | Varchar | 200     | Não   |
 
-# watch mode
-$ npm run start:dev
+### ⚙️ BI_REPLIC_CONFIG
 
-# production mode
-$ npm run start:prod
-```
+Tabela responsável por conter as configurações de quais dados serão enviados para o servidor externo.
 
-## Test
+| Campo                | Tipo      | Tamanho | Null? |
+| -------------------- | --------- | ------- | ----- |
+| UUID                 | Varchar   | 32      | Não   |
+| QUERY                | Varchar   | 2000    | Não   |
+| DATE_SINCE_LAST_PULL | Timestamp |         | Não   |
+| TABLES               | Varchar   | 2000    | Não   |
 
-```bash
-# unit tests
-$ npm run test
+### ⚙️ BI_DATA
 
-# e2e tests
-$ npm run test:e2e
+Tabela responsável por conter os dados que serão enviados para o servidor externo.
 
-# test coverage
-$ npm run test:cov
-```
+| Campo     | Tipo      | Tamanho | Null? |
+| --------- | --------- | ------- | ----- |
+| UUID      | Varchar   | 32      | Não   |
+| ID_CONFIG | Varchar   | 32      | Não   |
+| DATE      | Timestamp |         | Não   |
+| SITUATION | INT       |         | Não   |
+| DATA      | Varchar   | 2000    | Não   |
 
-## Support
+### 📃 Enumerador da situação dos dados
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- **Inserção**
+- **Alteração**
+- **Exclusão**
 
-## Stay in touch
+---
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## 🔧 Tabelas externas
 
-## License
+### ⚙️ CONFIG
 
-Nest is [MIT licensed](LICENSE).
+Ficará responsável por guardar as configurações as quais os clientes irão utilizar para enviar os dados.
+
+| Campo     | Tipo    | Tamanho | Null? |
+| --------- | ------- | ------- | ----- |
+| UUID      | Varchar | 32      | Não   |
+| QUERY     | Varchar | 2000    | Não   |
+| TABLES    | Varchar | 2000    | Não   |
+| REFERENCE | Varchar | 200     | Não   |
+
+### ⚙️ DATA
+
+A tabela onde os dados serão alocados no servidor externo.
+
+| Campo     | Tipo      | Tamanho | Null? |
+| --------- | --------- | ------- | ----- |
+| UUID      | Varchar   | 32      | Não   |
+| CLIENT    | VARCHAR   | 32      | Não   |
+| DATE      | Timestamp |         | Não   |
+| ID_CONFIG | Varchar   | 32      | Não   |
+
+---
+
+Feito com ❤️ e ☕ por **Rafael Scholant** 👋
