@@ -23,7 +23,6 @@ export class SincDataController {
   @UseGuards(AuthGuard('jwt'))
   create(@Body() createSincDatumDto: CreateSincDatumDto, @Req() req: any) {
     const user = req.user as UserDto;
-    console.log(createSincDatumDto);
     return this.sincDataService.create(createSincDatumDto, user);
   }
 

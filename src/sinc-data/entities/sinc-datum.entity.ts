@@ -24,7 +24,7 @@ export class SincDatum {
   dateSinc: Date;
 
   @Column({ type: 'json' })
-  data: { data: JSON };
+  data: Array<JSON>;
 
   @CreateDateColumn({
     type: 'timestamp',

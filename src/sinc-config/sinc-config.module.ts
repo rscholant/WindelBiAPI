@@ -4,9 +4,13 @@ import { SincConfigController } from './sinc-config.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SincConfig } from './entities/sinc-config.entity';
 import { SincConfigRepository } from './sinc-config.repository';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([SincConfig, SincConfigRepository])],
+  imports: [
+    UsersModule,
+    TypeOrmModule.forFeature([SincConfig, SincConfigRepository]),
+  ],
   controllers: [SincConfigController],
   providers: [SincConfigService],
 })

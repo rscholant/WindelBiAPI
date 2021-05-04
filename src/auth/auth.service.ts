@@ -40,7 +40,6 @@ export class AuthService {
 
     // generate and sign token
     const token = this._createToken(user);
-    console.log(token);
     return {
       cnpj: user.cnpj,
       ...token,
@@ -48,7 +47,6 @@ export class AuthService {
   }
 
   async validateUser(payload: JwtPayload): Promise<CreateUserDto> {
-    console.log(payload);
     const user = await this.usersService.findByPayload(payload);
     if (!user) {
       throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);

@@ -7,11 +7,13 @@ import {
   Param,
   Delete,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { SincConfigService } from './sinc-config.service';
 import { CreateSincConfigDto } from './dto/create-sinc-config.dto';
 import { UpdateSincConfigDto } from './dto/update-sinc-config.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { UserDto } from 'src/users/dto/user.dto';
 
 @Controller('sinc-config')
 export class SincConfigController {
@@ -19,20 +21,23 @@ export class SincConfigController {
 
   @Post()
   @UseGuards(AuthGuard('jwt'))
-  create(@Body() createSincConfigDto: CreateSincConfigDto) {
-    return this.sincConfigService.create(createSincConfigDto);
+  create(@Body() createSincConfigDto: CreateSincConfigDto, @Req() req: any) {
+    const user = req.user as UserDto;
+    return this.sincConfigService.create(createSincConfigDto, user);
   }
 
   @Get()
   @UseGuards(AuthGuard('jwt'))
-  findAll() {
-    return this.sincConfigService.findAll();
+  findAll(@Req() req: any) {
+    const user = req.user as UserDto;
+    return this.sincConfigService.findAll(user);
   }
 
   @Get(':id')
   @UseGuards(AuthGuard('jwt'))
-  findOne(@Param('id') id: string) {
-    return this.sincConfigService.findOne(id);
+  findOne(@Param('id') id: string, @Req() req: any) {
+    const user = req.user as UserDto;
+    return this.sincConfigService.findOne(id, user);
   }
 
   @Patch(':id')
@@ -40,8 +45,10 @@ export class SincConfigController {
   update(
     @Param('id') id: string,
     @Body() updateSincConfigDto: UpdateSincConfigDto,
+    @Req() req: any,
   ) {
-    return this.sincConfigService.update(id, updateSincConfigDto);
+    const user = req.user as UserDto;
+    return this.sincConfigService.update(id, updateSincConfigDto, user);
   }
 
   @Delete(':id')

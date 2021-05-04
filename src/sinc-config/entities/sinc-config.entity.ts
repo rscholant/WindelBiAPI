@@ -1,11 +1,13 @@
 import { SincDatum } from 'src/sinc-data/entities/sinc-datum.entity';
+import { User } from 'src/users/entities/user.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToOne,
+  OneToMany,
+  ManyToOne,
 } from 'typeorm';
 
 @Entity()
@@ -19,7 +21,10 @@ export class SincConfig {
   @Column({ length: 2000 })
   tables: string;
 
-  @OneToOne(() => SincDatum, (sincDatum) => sincDatum.sincConfig)
+  @ManyToOne(() => User, (user) => user.sincConfigs)
+  user: User;
+
+  @OneToMany(() => SincDatum, (sincDatum) => sincDatum.sincConfig)
   sincDatum: SincDatum[];
 
   @CreateDateColumn({

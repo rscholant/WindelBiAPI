@@ -1,6 +1,6 @@
-import { SincConfigDto } from '../../sinc-config/dto/sinc-config.dto';
+import { SincConfig } from 'src/sinc-config/entities/sinc-config.entity';
 export class CreateSincDatumDto {
-  readonly Config: SincConfigDto;
+  readonly sincConfig: SincConfig;
   readonly dateSinc: Date;
-  readonly data: JSON;
+  readonly data: Array<JSON>;
 }
