@@ -6,6 +6,7 @@ import { LoginUserDto } from '../users/dto/login-user.dto';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { JwtPayload } from './interfaces/payload.interface';
 import { JwtService } from '@nestjs/jwt';
+import { add } from 'date-fns';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
 
@@ -56,11 +57,19 @@ export class AuthService {
 
   private _createToken({ cnpj }: CreateUserDto): any {
     const expiresIn = process.env.EXPIRES_IN;
-
+    const expiresAt = add(new Date(), {
+      days: expiresIn.includes('d')
+        ? parseInt(expiresIn.replace(/\D/g, ''), 10)
+        : 0,
+      hours: expiresIn.includes('h')
+        ? parseInt(expiresIn.replace(/\D/g, ''), 10)
+        : 0,
+    }).getTime();
     const user: JwtPayload = { cnpj };
     const accessToken = this.jwtService.sign(user);
     return {
       expiresIn,
+      expiresAt,
       accessToken,
     };
   }

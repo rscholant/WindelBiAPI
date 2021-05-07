@@ -7,7 +7,13 @@ import { SincConfigModule } from './sinc-config/sinc-config.module';
 import { AuthModule } from './auth/auth.module';
 import { SincDataModule } from './sinc-data/sinc-data.module';
 @Module({
-  imports: [TypeOrmModule.forRoot(), AuthModule, UsersModule, SincConfigModule, SincDataModule],
+  imports: [
+    TypeOrmModule.forRoot(),
+    AuthModule,
+    UsersModule,
+    SincConfigModule,
+    SincDataModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
