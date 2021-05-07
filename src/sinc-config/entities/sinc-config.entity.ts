@@ -19,7 +19,7 @@ export class SincConfig {
   sql: string;
 
   @Column({ type: 'json' })
-  tables: Array<JSON>;
+  tables: Array<string>;
 
   @ManyToOne(() => User, (user) => user.sincConfigs)
   user: User;
