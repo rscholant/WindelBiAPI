@@ -12,7 +12,7 @@ export class SincConfigRepository extends Repository<SincConfig> {
   };
   findAllSincConfig = async (user: User) => {
     console.log(user);
-    return this.find({ where: { user }, relations: ['sincDatum'] });
+    return this.find({ where: { user } });
   };
   findOneSincConfig = async (id: string, user: User) => {
     const sincConfig = await this.find({

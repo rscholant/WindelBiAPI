@@ -18,8 +18,8 @@ export class SincConfig {
   @Column({ length: 2000 })
   sql: string;
 
-  @Column({ length: 2000 })
-  tables: string;
+  @Column({ type: 'json' })
+  tables: Array<JSON>;
 
   @ManyToOne(() => User, (user) => user.sincConfigs)
   user: User;

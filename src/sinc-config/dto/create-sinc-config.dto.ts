@@ -1,4 +1,4 @@
 export class CreateSincConfigDto {
   readonly sql: string;
-  readonly tables: string;
+  readonly tables: Array<JSON>;
 }
