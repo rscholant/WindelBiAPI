@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { SincConfigModule } from './sinc-config/sinc-config.module';
 import { AuthModule } from './auth/auth.module';
 import { SincDataModule } from './sinc-data/sinc-data.module';
+import { AppGateway } from './app.gateway';
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
@@ -15,6 +16,6 @@ import { SincDataModule } from './sinc-data/sinc-data.module';
     SincDataModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AppGateway],
 })
 export class AppModule {}

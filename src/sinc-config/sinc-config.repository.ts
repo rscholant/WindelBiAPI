@@ -1,5 +1,10 @@
 import { SincConfig } from './entities/sinc-config.entity';
-import { EntityNotFoundError, EntityRepository, Repository } from 'typeorm';
+import {
+  EntityNotFoundError,
+  EntityRepository,
+  Repository,
+  MoreThan,
+} from 'typeorm';
 import { CreateSincConfigDto } from './dto/create-sinc-config.dto';
 import { UpdateSincConfigDto } from './dto/update-sinc-config.dto';
 import { User } from 'src/users/entities/user.entity';
@@ -13,6 +18,14 @@ export class SincConfigRepository extends Repository<SincConfig> {
   findAllSincConfig = async (user: User) => {
     console.log(user);
     return this.find({ where: { user } });
+  };
+
+  findIsNewerSincConfig = async (id: number, user: User) => {
+    const sincConfig = await this.find({
+      where: { id: MoreThan(id), user },
+      relations: ['sincDatum'],
+    });
+    return sincConfig[0];
   };
   findOneSincConfig = async (id: string, user: User) => {
     const sincConfig = await this.find({

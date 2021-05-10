@@ -29,7 +29,10 @@ export class SincConfigService {
     const user = await this.usersService.findOne(id);
     return this.sincConfigRepository.findAllSincConfig(user);
   }
-
+  async findIsNewer(id: number, user: UserDto): Promise<SincConfig> {
+    const userData = await this.usersService.findOne(user.id);
+    return this.sincConfigRepository.findIsNewerSincConfig(id, userData);
+  }
   async findOne(id: string, user: UserDto): Promise<SincConfig> {
     const userData = await this.usersService.findOne(user.id);
     return this.sincConfigRepository.findOneSincConfig(id, userData);
