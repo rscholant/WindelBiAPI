@@ -1,5 +1,4 @@
 import {
-  SubscribeMessage,
   WebSocketGateway,
   OnGatewayInit,
   WebSocketServer,
@@ -8,28 +7,33 @@ import {
 } from '@nestjs/websockets';
 import { Logger } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
+import { UsersService } from './users/users.service';
+import { User } from './users/entities/user.entity';
 
 @WebSocketGateway()
 export class AppGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
-  private logger: Logger = new Logger('AppGateway');
 
-  @SubscribeMessage('msgToServer')
-  handleMessage(client: Socket, payload: string): void {
-    this.server.emit('msgToClient', payload);
+  constructor(private readonly usersService: UsersService) {}
+  private logger: Logger = new Logger('WebSocket');
+
+  handleConnection(client: Socket): any {
+    this.logger.log('New client detected: ' + client.id);
+    client.emit('events', { message: 'Connected', id: client.id });
+    this.usersService.updateWSId(client.handshake.query.auth, client.id);
+    this.server.sockets.sockets[client.id].emit('events', 'teste');
   }
-
-  afterInit(server: Server) {
-    this.logger.log('Init');
+  handleDisconnect(client: Socket): any {
+    this.usersService.updateWSId(client.handshake.query.auth, '');
+    this.logger.log('Disconnection detected: ' + client.id);
   }
-
-  handleDisconnect(client: Socket) {
-    this.logger.log(`Client disconnected: ${client.id}`);
+  async sendSincConfig({ wsID }: User, changes: any) {
+    if (wsID && this.server.sockets.sockets[wsID]) {
+      this.server.sockets.sockets[wsID].emit('sinc-config', changes);
+    }
   }
-
-  handleConnection(client: Socket, ...args: any[]) {
-    console.log(client.handshake);
-    this.logger.log(`Client connected: ${client.id}`);
+  afterInit(): any {
+    this.logger.log('Gateway successfully initiated');
   }
 }

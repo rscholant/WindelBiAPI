@@ -29,7 +29,11 @@ export class UsersService {
   update(id: string, updateUserDto: UpdateUserDto): Promise<User> {
     return this.userRepository.updateUser(id, updateUserDto);
   }
-
+  async updateWSId(cnpj: string, id: string): Promise<void> {
+    const user = await this.findByLogin({ cnpj });
+    user.wsID = id;
+    await this.update(user.id.toString(10), user);
+  }
   async remove(id: string): Promise<DeleteResult> {
     await this.userRepository.findOneUser(id);
     return this.userRepository.removeUser(id);

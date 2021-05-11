@@ -23,6 +23,9 @@ export class User {
   @Column()
   status: number;
 
+  @Column({ length: 50 })
+  wsID: string;
+
   @OneToMany(() => SincConfig, (sincConfig) => sincConfig.user)
   sincConfigs: SincConfig[];
 

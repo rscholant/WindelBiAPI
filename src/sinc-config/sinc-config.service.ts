@@ -7,27 +7,33 @@ import { UpdateSincConfigDto } from './dto/update-sinc-config.dto';
 import { SincConfig } from './entities/sinc-config.entity';
 import { SincConfigRepository } from './sinc-config.repository';
 import { UsersService } from 'src/users/users.service';
+import { AppGateway } from 'src/app.gateway';
 @Injectable()
 export class SincConfigService {
   constructor(
     @InjectRepository(SincConfigRepository)
     private sincConfigRepository: SincConfigRepository,
     private readonly usersService: UsersService,
+    private readonly appGateway: AppGateway,
   ) {}
   async create(
     createSincConfigDto: CreateSincConfigDto,
     user: UserDto,
   ): Promise<SincConfig> {
     const userData = await this.usersService.findOne(user.id);
-    return this.sincConfigRepository.createSincConfig(
+    const sincConfig = await this.sincConfigRepository.createSincConfig(
       createSincConfigDto,
       userData,
     );
+    await this.appGateway.sendSincConfig(userData, sincConfig);
+    return sincConfig;
   }
 
   async findAll({ id }: UserDto): Promise<SincConfig[]> {
     const user = await this.usersService.findOne(id);
-    return this.sincConfigRepository.findAllSincConfig(user);
+    const sincConfigs = await this.sincConfigRepository.findAllSincConfig(user);
+    await this.appGateway.sendSincConfig(user, sincConfigs);
+    return sincConfigs;
   }
   async findIsNewer(id: number, user: UserDto): Promise<SincConfig> {
     const userData = await this.usersService.findOne(user.id);
@@ -35,7 +41,12 @@ export class SincConfigService {
   }
   async findOne(id: string, user: UserDto): Promise<SincConfig> {
     const userData = await this.usersService.findOne(user.id);
-    return this.sincConfigRepository.findOneSincConfig(id, userData);
+    const sincConfigs = await this.sincConfigRepository.findOneSincConfig(
+      id,
+      userData,
+    );
+    await this.appGateway.sendSincConfig(userData, sincConfigs);
+    return sincConfigs;
   }
 
   async update(
@@ -44,11 +55,13 @@ export class SincConfigService {
     user: UserDto,
   ): Promise<SincConfig> {
     const userData = await this.usersService.findOne(user.id);
-    return this.sincConfigRepository.updateSincConfig(
+    const sincConfig = await this.sincConfigRepository.updateSincConfig(
       id,
       updateSincConfigDto,
       userData,
     );
+    await this.appGateway.sendSincConfig(userData, sincConfig);
+    return sincConfig;
   }
 
   remove(id: string): Promise<DeleteResult> {

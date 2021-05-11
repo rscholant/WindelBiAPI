@@ -16,7 +16,6 @@ export class SincConfigRepository extends Repository<SincConfig> {
     return this.save({ sql, tables, user });
   };
   findAllSincConfig = async (user: User) => {
-    console.log(user);
     return this.find({ where: { user } });
   };
 
