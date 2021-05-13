@@ -15,6 +15,9 @@ export class SincConfig {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ length: 200 })
+  title: string;
+
   @Column({ length: 2000 })
   sql: string;
 
