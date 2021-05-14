@@ -12,11 +12,11 @@ import { HttpException, HttpStatus } from '@nestjs/common';
 @EntityRepository(SincConfig)
 export class SincConfigRepository extends Repository<SincConfig> {
   createSincConfig = async (sincConfigDTO: CreateSincConfigDto, user: User) => {
-    const { sql, tables } = sincConfigDTO;
-    return this.save({ sql, tables, user });
+    const { title, sql, tables } = sincConfigDTO;
+    return this.save({ title, sql, tables, user });
   };
   findAllSincConfig = async (user: User) => {
-    return this.find({ where: { user } });
+    return this.find({ where: { user }, relations: ['sincDatum'] });
   };
 
   findIsNewerSincConfig = async (id: number, user: User) => {

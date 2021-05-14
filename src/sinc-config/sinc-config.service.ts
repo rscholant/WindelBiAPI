@@ -28,11 +28,21 @@ export class SincConfigService {
     await this.appGateway.sendSincConfig(userData, sincConfig);
     return sincConfig;
   }
-
+  async requestAllSincConfig(user: UserDto): Promise<void> {
+    const userData = await this.usersService.findOne(user.id);
+    await this.appGateway.requestAllSincConfig(userData);
+  }
+  async requestSincConfig(user: UserDto, id: string): Promise<void> {
+    const userData = await this.usersService.findOne(user.id);
+    const sincConfig = await this.sincConfigRepository.findOneSincConfig(
+      id,
+      userData,
+    );
+    await this.appGateway.requestSincConfig(userData, sincConfig);
+  }
   async findAll({ id }: UserDto): Promise<SincConfig[]> {
     const user = await this.usersService.findOne(id);
     const sincConfigs = await this.sincConfigRepository.findAllSincConfig(user);
-    await this.appGateway.sendSincConfig(user, sincConfigs);
     return sincConfigs;
   }
   async findIsNewer(id: number, user: UserDto): Promise<SincConfig> {
@@ -45,7 +55,6 @@ export class SincConfigService {
       id,
       userData,
     );
-    await this.appGateway.sendSincConfig(userData, sincConfigs);
     return sincConfigs;
   }
 

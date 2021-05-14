@@ -9,6 +9,7 @@ import { Logger } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
 import { UsersService } from './users/users.service';
 import { User } from './users/entities/user.entity';
+import { SincConfig } from './sinc-config/entities/sinc-config.entity';
 
 @WebSocketGateway()
 export class AppGateway
@@ -30,7 +31,20 @@ export class AppGateway
   }
   async sendSincConfig({ wsID }: User, changes: any) {
     if (wsID && this.server.sockets.sockets[wsID]) {
-      this.server.sockets.sockets[wsID].emit('sinc-config', changes);
+      this.server.sockets.connected[wsID].emit('sinc-config', changes);
+    }
+  }
+  async requestAllSincConfig({ wsID }: User) {
+    if (wsID && this.server.sockets.sockets[wsID]) {
+      this.server.sockets.connected[wsID].emit('req-all-sinc-config', true);
+    }
+  }
+  async requestSincConfig({ wsID }: User, sincConfig: SincConfig) {
+    if (wsID && this.server.sockets.sockets[wsID]) {
+      this.server.sockets.connected[wsID].emit(
+        'req-sinc-config',
+        sincConfig.id,
+      );
     }
   }
   afterInit(): any {

@@ -32,6 +32,18 @@ export class SincConfigController {
     const user = req.user as UserDto;
     return this.sincConfigService.findAll(user);
   }
+  @Post('req-all')
+  @UseGuards(AuthGuard('jwt'))
+  requestAllSincConfig(@Req() req: any) {
+    const user = req.user as UserDto;
+    return this.sincConfigService.requestAllSincConfig(user);
+  }
+  @Post('req/:id')
+  @UseGuards(AuthGuard('jwt'))
+  requestSincConfig(@Param('id') id: string, @Req() req: any) {
+    const user = req.user as UserDto;
+    return this.sincConfigService.requestSincConfig(user, id);
+  }
   @Get('is-newer/:id')
   @UseGuards(AuthGuard('jwt'))
   findIsNewer(@Param('id') id: number, @Req() req: any) {
