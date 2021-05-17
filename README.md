@@ -1,4 +1,4 @@
-# Windel BI API ™
+<img src="./.github/logo.png" min-width="400px" max-width="400px" width="400px" align="center" alt="logo">
 
 ---
 
@@ -8,49 +8,15 @@ Projeto criado para que se possa enviar dados do banco de dados local que está 
 
 ---
 
-## 🔧 Tabelas locais
+## 🔧 Configuração do banco de dados
 
-### ⚙️ BI_CONFIG
+### ⚙️ USERS
 
-Tabela responsável por conter as configurações do servidor, versão do banco de dados, versão do sincronizador e etc...
+Ficará responsável por guardar as informações dos clientes do sistema, se estão ativos ou não.
 
 | Campo | Tipo    | Tamanho | Null? |
 | ----- | ------- | ------- | ----- |
-| KEY   | Varchar | 100     | Não   |
-| VALUE | Varchar | 200     | Não   |
-
-### ⚙️ BI_REPLIC_CONFIG
-
-Tabela responsável por conter as configurações de quais dados serão enviados para o servidor externo.
-
-| Campo                | Tipo      | Tamanho | Null? |
-| -------------------- | --------- | ------- | ----- |
-| UUID                 | Varchar   | 32      | Não   |
-| QUERY                | Varchar   | 2000    | Não   |
-| DATE_SINCE_LAST_PULL | Timestamp |         | Não   |
-| TABLES               | Varchar   | 2000    | Não   |
-
-### ⚙️ BI_DATA
-
-Tabela responsável por conter os dados que serão enviados para o servidor externo.
-
-| Campo     | Tipo      | Tamanho | Null? |
-| --------- | --------- | ------- | ----- |
-| UUID      | Varchar   | 32      | Não   |
-| ID_CONFIG | Varchar   | 32      | Não   |
-| DATE      | Timestamp |         | Não   |
-| SITUATION | INT       |         | Não   |
-| DATA      | Varchar   | 2000    | Não   |
-
-### 📃 Enumerador da situação dos dados
-
-- **Inserção**
-- **Alteração**
-- **Exclusão**
-
----
-
-## 🔧 Tabelas externas
+| ID    | Integer |         | Não   |
 
 ### ⚙️ CONFIG
 

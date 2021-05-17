@@ -5,3 +5,4 @@ dist
 package.json
 yarn.lock
 ormconfig.json
+README.md
